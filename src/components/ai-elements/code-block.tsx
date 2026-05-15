@@ -6,6 +6,8 @@ import type {
   BundledTheme,
   HighlighterGeneric,
   ThemedToken,
+  ThemeRegistrationAny,
+  TokensResult,
 } from "shiki";
 import { LRUMap } from "@/lib/lru-map";
 
@@ -283,26 +285,28 @@ function toTokensResult(
  * themes prop is the [light, dark] pair; when null/undefined the caller
  * gets SHIKI_DEFAULT_LIGHT / SHIKI_DEFAULT_DARK.
  */
+type ThemeInput = BundledTheme | ThemeRegistrationAny;
+
 export function createSharedCodePlugin(options?: {
-  themes?: [BundledTheme, BundledTheme];
+  themes?: [ThemeInput, ThemeInput];
 }): {
   name: "shiki";
   type: "code-highlighter";
   highlight: (
-    params: { code: string; language: BundledLanguage; themes: [string, string] },
-    callback?: (result: ReturnType<typeof toTokensResult>) => void,
-  ) => ReturnType<typeof toTokensResult> | null;
+    params: { code: string; language: BundledLanguage; themes: [ThemeInput, ThemeInput] },
+    callback?: (result: TokensResult) => void,
+  ) => TokensResult | null;
   supportsLanguage: (language: BundledLanguage) => boolean;
   getSupportedLanguages: () => BundledLanguage[];
-  getThemes: () => [BundledTheme, BundledTheme];
+  getThemes: () => [ThemeInput, ThemeInput];
 } {
   const [defaultLight, defaultDark] = options?.themes ?? [SHIKI_DEFAULT_LIGHT, SHIKI_DEFAULT_DARK];
   return {
     name: "shiki" as const,
     type: "code-highlighter" as const,
     highlight(params, callback) {
-      const light = (params.themes[0] as BundledTheme) ?? defaultLight;
-      const dark = (params.themes[1] as BundledTheme) ?? defaultDark;
+      const light = (params.themes[0] as BundledTheme) ?? (defaultLight as BundledTheme);
+      const dark = (params.themes[1] as BundledTheme) ?? (defaultDark as BundledTheme);
       const tokenized = highlightCode(
         params.code,
         params.language,

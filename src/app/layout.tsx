@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { ThemeFamilyProvider } from "@/components/layout/ThemeFamilyProvider";
@@ -9,15 +9,6 @@ import { getAllThemeFamilies, getThemeFamilyMetas } from "@/lib/theme/loader";
 import { renderThemeFamilyCSS } from "@/lib/theme/render-css";
 import { getSetting } from "@/lib/db";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "CodePilot",
@@ -58,9 +49,7 @@ export default function RootLayout({
         )}
         <style id="theme-family-vars" dangerouslySetInnerHTML={{ __html: themeFamilyCSS }} />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <ThemeProvider>
           <ThemeFamilyProvider families={familiesMeta}>
             <I18nProvider>

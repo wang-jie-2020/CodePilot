@@ -12,6 +12,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import type { TooltipContentProps } from "recharts";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -37,15 +38,6 @@ interface UsageStatsResponse {
   }>;
 }
 
-// Recharts v3 Payload — only the fields we actually read
-interface RechartsPayloadItem {
-  name?: string | number;
-  dataKey?: string | number;
-  value?: number;
-  color?: string;
-  fill?: string;
-  payload?: Record<string, unknown>;
-}
 
 // ---------------------------------------------------------------------------
 // Number formatting helpers
@@ -132,11 +124,7 @@ function getModelColor(_model: string, idx: number): string {
 // Chart tooltip (recharts v3 compatible)
 // ---------------------------------------------------------------------------
 
-function ChartTooltip({ active, payload, label }: {
-  active?: boolean;
-  payload?: ReadonlyArray<RechartsPayloadItem>;
-  label?: string | number;
-}) {
+function ChartTooltip({ active, payload, label }: TooltipContentProps) {
   if (!active || !payload?.length) return null;
 
   // Filter out entries with zero or missing values
@@ -156,7 +144,7 @@ function ChartTooltip({ active, payload, label }: {
               style={{ backgroundColor: displayColor }}
             />
             <span>{displayName}</span>
-            <span className="ml-auto font-mono">{formatTokens(p.value ?? 0)}</span>
+            <span className="ml-auto font-mono">{formatTokens(typeof p.value === "number" ? p.value : 0)}</span>
           </div>
         );
       })}

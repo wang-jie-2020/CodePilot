@@ -37,8 +37,8 @@ export const WIDGET_CSS_BRIDGE = /* css */ `
 --color-border-warning:       var(--status-warning-border);
 
 /* ── Typography ───────────────────────────────────── */
---font-sans:                  var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
---font-mono:                  var(--font-geist-mono), ui-monospace, monospace;
+--font-sans:                  var(--font-geist-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif);
+--font-mono:                  var(--font-geist-mono, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", ui-monospace, monospace);
 --font-serif:                 Georgia, 'Times New Roman', serif;
 
 /* ── Layout ───────────────────────────────────────── */
